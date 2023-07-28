@@ -6,23 +6,100 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core'
-import drivingImg from '../../assets/images/motor.png'
-import bicyclingImg from '../../assets/images/bike.png'
-import walkingImg from '../../assets/images/walk2.png'
+import { useEffect, useState } from 'react'
+import { transportModes } from '../../data'
 
-export default function PackageSection({
+export default function TransportSection({
   isVisible,
   setIsVisible,
   setTransportMode,
   selectedParcelType,
   transportMode,
+  map,
+  originSelection,
+  destinationSelection,
+  durations,
+  setDurations,
+  routes,
+  setRoutes,
+  prices,
+  setPrices,
 }) {
-  // const vehicleType = selectedParcelType?.vehicle_type
+  const [clickedIndex, setClickedIndex] = useState(null)
+  const [error, setError] = useState(null)
 
-  const handleCardClick = (mode) => {
+  const handleCardClick = (mode, index) => {
+    setClickedIndex(index === clickedIndex ? null : index)
+    console.log(clickedIndex)
+    console.log(prices)
     if (selectedParcelType.vehicle_type[mode]) {
       setTransportMode(mode.toUpperCase())
     }
+  }
+
+  async function calculateRoutes() {
+    if (originSelection === null || destinationSelection === null) {
+      return
+    }
+
+    // eslint-disable-next-line no-undef
+    const directionsService = new google.maps.DirectionsService()
+
+    try {
+      const modes = ['DRIVING', 'WALKING', 'BICYCLING']
+      const newRoutes = []
+      const newDurations = []
+      const newPrices = []
+
+      for (const mode of modes) {
+        const results = await directionsService.route({
+          origin: originSelection,
+          destination: destinationSelection,
+          travelMode: mode,
+        })
+
+        newRoutes.push(results.routes[0])
+        newDurations.push(results.routes[0].legs[0].duration.text)
+        newPrices.push(
+          calculatePrice(results.routes[0].legs[0].duration.text, mode)
+        )
+      }
+
+      setRoutes(newRoutes)
+      setDurations(newDurations)
+      setPrices(newPrices)
+      console.log(prices)
+      setError(null)
+    } catch (error) {
+      console.log('Error calculating routes:', error)
+      setError('Error calculating routes. Please try again.')
+    }
+  }
+
+  useEffect(() => {
+    calculateRoutes()
+  }, [originSelection, destinationSelection, map, selectedParcelType])
+
+  function calculatePrice(duration, mode) {
+    let costPerMinute = 0
+
+    switch (mode) {
+      case 'DRIVING':
+        costPerMinute = 0.5
+        break
+      case 'WALKING':
+        costPerMinute = 0.1
+        break
+      case 'BICYCLING':
+        costPerMinute = 0.2
+        break
+      default:
+        return null
+    }
+
+    const totalCost = parseFloat(duration) * costPerMinute
+
+    return totalCost.toFixed(2)
   }
 
   if (!isVisible) {
@@ -36,12 +113,13 @@ export default function PackageSection({
               </Typography>
             </Grid>
             <Grid item>
-              <Grid container>
+              <Grid container alignItems="center">
                 <Grid item>
                   <Typography>{transportMode}</Typography>
                 </Grid>
-                <Button onClick={() => setIsVisible(true)}>Edit</Button>
-                <Grid item></Grid>
+                <Grid item>
+                  <Button onClick={() => setIsVisible(true)}>Edit</Button>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -59,103 +137,66 @@ export default function PackageSection({
               Transport Options
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={4}>
-            <Card
-              onClick={() => handleCardClick('driving')}
-              style={{
-                cursor: selectedParcelType.vehicle_type.driving
-                  ? 'pointer'
-                  : 'not-allowed',
-                backgroundColor:
-                  transportMode === 'driving' ? 'lightblue' : 'transparent',
-              }}
-            >
-              <CardMedia
-                component="img"
-                alt="green iguana"
-                height={100}
-                image={drivingImg}
-              />
-              <CardContent>
-                {selectedParcelType.vehicle_type.driving ? (
-                  <Typography variant="body2">Price</Typography>
-                ) : (
-                  <Typography variant="body2">No</Typography>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Card
-              onClick={() => handleCardClick('bicycling')}
-              style={{
-                cursor: selectedParcelType.vehicle_type.bicycling
-                  ? 'pointer'
-                  : 'not-allowed',
-                backgroundColor:
-                  transportMode === 'bicycling' ? 'lightblue' : 'transparent',
-              }}
-            >
-              <CardMedia
-                component="img"
-                alt="green iguana"
-                height={100}
-                image={bicyclingImg}
-              />
-              <CardContent>
-                {selectedParcelType.vehicle_type.bicycling ? (
-                  <Typography variant="body2">Price</Typography>
-                ) : (
-                  <Typography variant="body2">No</Typography>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Card
-              onClick={() => handleCardClick('walking')}
-              style={{
-                cursor: selectedParcelType.vehicle_type.walking
-                  ? 'pointer'
-                  : 'not-allowed',
-                backgroundColor:
-                  transportMode === 'walking' ? 'lightblue' : 'transparent',
-              }}
-            >
-              <CardMedia
-                component="img"
-                alt="green iguana"
-                height={100}
-                style={{ objectFit: 'contain' }}
-                image={walkingImg}
-              />
-              <CardContent>
-                {selectedParcelType.vehicle_type.walking ? (
-                  <Typography variant="body2">Price</Typography>
-                ) : (
-                  <Typography variant="body2">No</Typography>
-                )}
-              </CardContent>
-            </Card>
+          {transportModes.map((mode, index) => (
+            <Grid item xs={4} key={index}>
+              <Card
+                onClick={() => handleCardClick(mode.mode, index)}
+                style={{
+                  cursor: selectedParcelType.vehicle_type[mode.mode]
+                    ? 'pointer'
+                    : 'not-allowed',
+                  backgroundColor:
+                    clickedIndex === index
+                      ? 'lightblue'
+                      : selectedParcelType.vehicle_type[mode.mode]
+                      ? 'transparent'
+                      : 'gray',
+                  height: '100%',
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  alt="green iguana"
+                  height={100}
+                  style={{ objectFit: 'contain' }}
+                  image={mode.image}
+                />
+                <CardContent>
+                  {selectedParcelType.vehicle_type[mode.mode] ? (
+                    <>
+                      <Typography variant="body2">
+                        Price: $
+                        {calculatePrice(
+                          durations[index],
+                          `${mode.mode.toUpperCase()}`
+                        )}
+                      </Typography>
+                      <Typography variant="body2">
+                        {durations[index]}
+                      </Typography>
+                    </>
+                  ) : (
+                    <Typography variant="body2">Not an Option</Typography>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+          <Grid item xs={12}>
+            <Typography>Duration: {durations[clickedIndex]}</Typography>
+            <Typography>Price: ${prices[clickedIndex]}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Button
               variant="outlined"
               style={{ width: '100%', height: '64px' }}
-              onClick={() => setIsVisible(false)}
+              // onClick={() => onChange(parcelTypes[clickedIndex])}
+              disabled={clickedIndex === null}
             >
               Confirm Transport Option
             </Button>
           </Grid>
         </Grid>
-        {/* <h2>Section 4</h2>
-      <select value={selection} onChange={handleChange}>
-        <option value="DRIVING">Driving</option>
-        <option value="BICYCLING">Bicycling</option>
-        <option value="TRANSIT">Transit</option>
-        <option value="WALKING">Walking</option>
-      </select>
-      <button onClick={() => setIsVisible(false)}>Save Changes</button> */}
       </CardContent>
     </Card>
   )

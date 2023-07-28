@@ -11,7 +11,6 @@ export default function ParcelSection({
   selectedParcelType,
   setSelectedParcelType,
 }) {
-  const [selection, setSelection] = useState('')
   const [parcelTypes, setParcelTypes] = useState([])
   const [clickedIndex, setClickedIndex] = useState(null)
 

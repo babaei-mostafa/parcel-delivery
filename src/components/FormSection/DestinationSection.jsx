@@ -20,7 +20,6 @@ import {
 import { Autocomplete } from '@material-ui/lab'
 import destinationIcon from '../../assets/images/orange-dot.png'
 
-
 export default function DestinationSection({
   isVisible,
   setIsVisible,
@@ -39,6 +38,7 @@ export default function DestinationSection({
   google,
   setDirectionsResponse,
   setDistance,
+  distance,
   setDuration,
   duration,
 }) {
@@ -75,6 +75,7 @@ export default function DestinationSection({
       })
 
       setDirectionsResponse(results)
+      setDistance(results.routes[0].legs[0].distance.text)
 
       // Get the bounds of the route
       const bounds = new google.maps.LatLngBounds()
@@ -99,6 +100,7 @@ export default function DestinationSection({
     calculateRoute()
   }, [originSelection, destinationSelection, transportMode, map])
 
+ 
   if (!isVisible) {
     return (
       <Card variant="outlined" style={{ margin: '4px' }}>

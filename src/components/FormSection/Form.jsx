@@ -17,12 +17,20 @@ export default function Form({
   google,
   directionsResponse,
   setDirectionsResponse,
+  distance,
+  setDistance,
+  duration,
+  setDuration,
+  prices,
+  setPrices,
 }) {
   const [originSection, setOriginSection] = useState(true)
   const [destinatioSection, setDestinatioSection] = useState(false)
   const [packageSection, setPackageSection] = useState(false)
   const [transportSection, setTransportSection] = useState(false)
   const [selectedParcelType, setSelectedParcelType] = useState(null)
+  const [routes, setRoutes] = useState([])
+  const [durations, setDurations] = useState([])
 
   const {
     ready: originAutocompleteIsReady,
@@ -65,7 +73,7 @@ export default function Form({
 
   return (
     <div>
-      <Grid container>
+      <Grid container spacing={1}>
         <Grid item xs={12}>
           <OriginSection
             isVisible={originSection}
@@ -101,6 +109,10 @@ export default function Form({
             google={google}
             directionsResponse={directionsResponse}
             setDirectionsResponse={setDirectionsResponse}
+            distance={distance}
+            setDistance={setDistance}
+            duration={duration}
+            setDuration={setDuration}
           />
         </Grid>
         <Grid item xs={12}>
@@ -118,6 +130,17 @@ export default function Form({
             setIsVisible={setTransportSection}
             setTransportMode={setTransportMode}
             selectedParcelType={selectedParcelType}
+            distance={distance}
+            duration={duration}
+            map={map}
+            originSelection={originSelection}
+            destinationSelection={destinationSelection}
+            routes={routes}
+            setRoutes={setRoutes}
+            durations={durations}
+            setDurations={setDurations}
+            prices={prices}
+            setPrices={setPrices}
           />
         </Grid>
       </Grid>
