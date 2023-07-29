@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { useEffect, useState } from 'react'
-import { transportModes } from '../../data'
+import { transportModes } from '../../../data'
 
 export default function TransportSection({
   isVisible,
@@ -20,7 +20,6 @@ export default function TransportSection({
   destinationSelection,
   durations,
   setDurations,
-  routes,
   setRoutes,
   prices,
   setPrices,
@@ -131,6 +130,11 @@ export default function TransportSection({
   return (
     <Card>
       <CardContent>
+        {error && (
+          <Typography color="error" variant="body2" gutterBottom>
+            {error}
+          </Typography>
+        )}
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography gutterBottom variant="body1" component="div">

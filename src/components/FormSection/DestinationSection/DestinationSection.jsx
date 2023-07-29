@@ -1,14 +1,6 @@
 import { useState, useEffect } from 'react'
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-} from '@reach/combobox'
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
-
-import useStyles from '../MapTwo/styles'
+import useStyles from './styles'
 import {
   Button,
   Card,
@@ -18,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab'
-import destinationIcon from '../../assets/images/orange-dot.png'
+import destinationIcon from '../../../assets/images/orange-dot.png'
 
 export default function DestinationSection({
   isVisible,
@@ -27,7 +19,6 @@ export default function DestinationSection({
   setDestinationInputValue,
   destinationAutocompleteIsready,
   destinationInputValue,
-  destinationSuggestionsStatus,
   destinationDataSuggestions,
   setDestinationSelection,
   clearDestinationSuggestions,
@@ -35,14 +26,9 @@ export default function DestinationSection({
   originSelection,
   destinationSelection,
   transportMode,
-  google,
   setDirectionsResponse,
   setDistance,
-  distance,
-  setDuration,
-  duration,
 }) {
-  const [recipientName, setRecipientName] = useState('')
   const [recipientPhoneNumber, setRecipientPhoneNumber] = useState('')
   const [error, setError] = useState(null)
   const classes = useStyles()
@@ -65,6 +51,7 @@ export default function DestinationSection({
       return
     }
 
+    // eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService()
 
     try {
@@ -78,6 +65,7 @@ export default function DestinationSection({
       setDistance(results.routes[0].legs[0].distance.text)
 
       // Get the bounds of the route
+      // eslint-disable-next-line no-undef
       const bounds = new google.maps.LatLngBounds()
       results.routes[0].legs.forEach((leg) => {
         leg.steps.forEach((step) => {
@@ -89,10 +77,10 @@ export default function DestinationSection({
 
       // Fit the bounds of the route on the map
       map.fitBounds(bounds)
-      setError(null) // Clear any previous error messages
+      setError(null)
     } catch (error) {
       console.log('Error calculating route:', error)
-      setError('Error calculating route. Please try again.') // Set the error message
+      setError('Error calculating route. Please try again.')
     }
   }
 
@@ -100,11 +88,15 @@ export default function DestinationSection({
     calculateRoute()
   }, [originSelection, destinationSelection, transportMode, map])
 
- 
   if (!isVisible) {
     return (
       <Card variant="outlined" style={{ margin: '4px' }}>
         <CardContent>
+          {error && (
+            <Typography color="error" variant="body2" gutterBottom>
+              {error}
+            </Typography>
+          )}
           <Grid container>
             <Grid item xs={12}>
               <Grid container>

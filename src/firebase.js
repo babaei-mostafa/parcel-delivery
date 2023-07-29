@@ -12,16 +12,12 @@ const firebaseConfig = {
   measurementId: 'G-LW7HN2YY44',
 }
 
-// Initialize Firebase with your configuration object
 const app = initializeApp(firebaseConfig)
 
-// Get a Firestore instance
 const db = getFirestore(app)
 
-// Define a reference to the "parcelTypes" collection
 const parcelTypesRef = collection(db, 'bearerParcels')
 
-// Export a function that fetches the "parcelTypes" collection
 export const getParcelTypes = () => {
   return getDocs(parcelTypesRef).then((querySnapshot) => {
     return querySnapshot.docs.map((doc) => doc.data())

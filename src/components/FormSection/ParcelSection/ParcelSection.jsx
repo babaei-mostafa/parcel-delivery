@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { getParcelTypes } from '../../firebase'
+import { getParcelTypes } from '../../../firebase'
 // import { getStorage, ref, getDownloadURL } from 'firebase/storage'
-import backupImage from '../../assets/images/D_small box.png'
+import backupImage from '../../../assets/images/D_small box.png'
 import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core'
 
 export default function ParcelSection({
@@ -9,36 +9,36 @@ export default function ParcelSection({
   setIsVisible,
   onChange,
   selectedParcelType,
-  setSelectedParcelType,
 }) {
   const [parcelTypes, setParcelTypes] = useState([])
   const [clickedIndex, setClickedIndex] = useState(null)
+  const [error, setError] = useState(null)
 
   const handleRowClick = (index) => {
     setClickedIndex(index === clickedIndex ? null : index)
   }
-  //   const storage = getStorage()
+  // const storage = getStorage()
 
   useEffect(() => {
-    getParcelTypes()
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const data = await getParcelTypes()
         setParcelTypes(data)
-        // console.log(parcelTypes)
-      })
-      .catch((error) => {
+        setError(null)
+      } catch (error) {
         console.log(error)
-      })
+        setError('Error getting Parcel Types. Please try again.')
+      }
+    }
+
+    fetchData()
   }, [])
 
-  //   const getImageUrl = async (imageName) => {
-  //     const storageRef = ref(storage, `parcelsImage/${imageName}`)
-  //     const url = await getDownloadURL(storageRef)
-  //     return url
-  //   }
-
-  const handleParcelTypeSelect = (parcelType) => {
-    setSelectedParcelType(parcelType)
-  }
+  // const getImageUrl = async (imageName) => {
+  //   const storageRef = ref(storage, `parcelsImage/${imageName}`)
+  //   const url = await getDownloadURL(storageRef)
+  //   return url
+  // }
 
   if (!isVisible) {
     return (
@@ -69,6 +69,11 @@ export default function ParcelSection({
     <>
       <Card>
         <CardContent>
+          {error && (
+            <Typography color="error" variant="body2" gutterBottom>
+              {error}
+            </Typography>
+          )}
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography gutterBottom variant="body1" component="div">
@@ -86,7 +91,6 @@ export default function ParcelSection({
                     backgroundColor:
                       clickedIndex === index ? 'lightblue' : 'transparent',
                   }}
-                  //   className="grid-row"
                 >
                   <Grid item xs={6}>
                     <Grid container spacing={2}>
@@ -101,11 +105,11 @@ export default function ParcelSection({
                           }}
                         />
                         {/* {parcelType.parcel_img_url && (
-            <img
-              src={getImageUrl(parcelType.parcel_img_url)}
-              alt="Parcel"
-            />
-          )} */}
+                          <img
+                            src={getImageUrl(parcelType.parcel_img_url)}
+                            alt="Parcel"
+                          />
+                        )} */}
                       </Grid>
                       <Grid item xs={8}>
                         <Typography variant="body1">

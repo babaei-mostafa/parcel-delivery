@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import usePlacesAutocomplete from 'use-places-autocomplete'
 import OriginSection from './OriginSection/OriginSection'
-import DestinationSection from './DestinationSection'
-import ParcelSection from './ParcelSection'
-import TransportSection from './TransportSection'
+import DestinationSection from './DestinationSection/DestinationSection'
+import ParcelSection from './ParcelSection/ParcelSection'
+import TransportSection from './TransportSection/TransportSection'
 import { Grid } from '@material-ui/core'
 
 export default function Form({
@@ -14,7 +14,6 @@ export default function Form({
   map,
   originSelection,
   destinationSelection,
-  google,
   directionsResponse,
   setDirectionsResponse,
   distance,
@@ -106,7 +105,6 @@ export default function Form({
             originSelection={originSelection}
             destinationSelection={destinationSelection}
             transportMode={transportMode}
-            google={google}
             directionsResponse={directionsResponse}
             setDirectionsResponse={setDirectionsResponse}
             distance={distance}

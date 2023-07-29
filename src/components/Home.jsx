@@ -1,9 +1,8 @@
-/* eslint-disable no-undef */
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useLoadScript } from '@react-google-maps/api'
 import '@reach/combobox/styles.css'
 import Form from './FormSection/Form'
-import Map from './Map'
+import Map from './Map/Map'
 import { CssBaseline, Grid } from '@material-ui/core'
 import Header from './Header/Header'
 import '../Home.css'
@@ -39,7 +38,6 @@ export default function Home() {
             transportMode={transportMode}
             setTransportMode={setTransportMode}
             map={map}
-            google={google}
             directionsResponse={directionsResponse}
             setDirectionsResponse={setDirectionsResponse}
             setDistance={setDistance}
