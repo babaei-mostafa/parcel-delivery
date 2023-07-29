@@ -6,8 +6,4 @@ export default makeStyles(() => ({
     width: '100%',
     padding: '4px',
   },
-  comboboxInput: {
-    width: '30%',
-    padding: '0.5rem',
-  },
 }))

@@ -1,11 +1,4 @@
 import { useState } from 'react'
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-} from '@reach/combobox'
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import useStyles from './styles'
 import {

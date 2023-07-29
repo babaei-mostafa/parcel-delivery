@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useLoadScript } from '@react-google-maps/api'
-import '@reach/combobox/styles.css'
 import Form from './FormSection/Form'
 import Map from './Map/Map'
 import { CssBaseline, Grid } from '@material-ui/core'
