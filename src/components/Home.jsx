@@ -5,7 +5,6 @@ import Form from './FormSection/Form'
 import Map from './Map/Map'
 import { CssBaseline, Grid } from '@material-ui/core'
 import Header from './Header/Header'
-import '../Home.css'
 
 export default function Home() {
   const { isLoaded, loadError } = useLoadScript({
@@ -20,7 +19,6 @@ export default function Home() {
   const [transportMode, setTransportMode] = useState('DRIVING')
   const [distance, setDistance] = useState('')
   const [duration, setDuration] = useState('')
-  const [prices, setPrices] = useState([])
 
   if (loadError) return <div>Error loading Google Maps API</div>
   if (!isLoaded) return <h3>Loading...</h3>
@@ -44,12 +42,9 @@ export default function Home() {
             distance={distance}
             setDuration={setDuration}
             duration={duration}
-            prices={prices}
-            setPrices={setPrices}
           />
         </Grid>
         <Grid item xs={12} md={7}>
-          {/* <MapThree /> */}
           <Map
             originSelection={originSelection}
             destinationSelection={destinationSelection}

@@ -92,11 +92,6 @@ export default function DestinationSection({
     return (
       <Card variant="outlined" style={{ margin: '4px' }}>
         <CardContent>
-          {error && (
-            <Typography color="error" variant="body2" gutterBottom>
-              {error}
-            </Typography>
-          )}
           <Grid container>
             <Grid item xs={12}>
               <Grid container>
@@ -137,95 +132,101 @@ export default function DestinationSection({
     <>
       <Card variant="outlined" style={{ margin: '4px' }}>
         <CardContent>
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12}>
-              <Grid container>
-                <Grid item>
-                  <img
-                    src={destinationIcon}
-                    alt="package"
-                    style={{
-                      width: '25px',
-                      height: '25px',
-                      objectFit: 'cover',
-                    }}
-                  />
-                </Grid>
-                <Grid item>
-                  <Typography gutterBottom variant="body1" component="div">
-                    Destination
-                  </Typography>
+          {error ? (
+            <Typography color="error" variant="body2" gutterBottom>
+              {error}
+            </Typography>
+          ) : (
+            <Grid container spacing={4} alignItems="center">
+              <Grid item xs={12}>
+                <Grid container>
+                  <Grid item>
+                    <img
+                      src={destinationIcon}
+                      alt="package"
+                      style={{
+                        width: '25px',
+                        height: '25px',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Typography gutterBottom variant="body1" component="div">
+                      Destination
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Autocomplete
-                options={destinationDataSuggestions}
-                getOptionLabel={(option) => option.description}
-                inputValue={destinationInputValue}
-                onChange={(event, value) => {
-                  if (value) {
-                    handleDestinationSelectSuggestion(value.description)()
-                  }
-                }}
-                onInputChange={(event, value) => {
-                  setDestinationInputValue(value)
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Enter Destination"
-                    variant="standard"
-                    className={classes.input}
-                    disabled={!destinationAutocompleteIsready}
-                  />
-                )}
-              />
-            </Grid>
+              <Grid item xs={12}>
+                <Autocomplete
+                  options={destinationDataSuggestions}
+                  getOptionLabel={(option) => option.description}
+                  inputValue={destinationInputValue}
+                  onChange={(event, value) => {
+                    if (value) {
+                      handleDestinationSelectSuggestion(value.description)()
+                    }
+                  }}
+                  onInputChange={(event, value) => {
+                    setDestinationInputValue(value)
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Enter Destination"
+                      variant="standard"
+                      className={classes.input}
+                      disabled={!destinationAutocompleteIsready}
+                    />
+                  )}
+                />
+              </Grid>
 
-            {/* <div className="sender-input-container"> */}
-            <Grid item xs={12}>
+              {/* <div className="sender-input-container"> */}
+              <Grid item xs={12}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      id="outlined-basic"
+                      label="Phone Number"
+                      variant="standard"
+                      value={recipientPhoneNumber}
+                      onChange={(e) => setRecipientPhoneNumber(e.target.value)}
+                      style={{ width: '100%' }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      id="outlined-basic"
+                      label="Recipient's Name"
+                      variant="standard"
+                      style={{ width: '100%' }}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
               <Grid container spacing={1}>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    id="outlined-basic"
-                    label="Phone Number"
-                    variant="standard"
-                    value={recipientPhoneNumber}
-                    onChange={(e) => setRecipientPhoneNumber(e.target.value)}
-                    style={{ width: '100%' }}
-                  />
+                  <Button
+                    variant="outlined"
+                    style={{ width: '100%', height: '64px' }}
+                  >
+                    Choose from favorites
+                  </Button>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    id="outlined-basic"
-                    label="Recipient's Name"
-                    variant="standard"
-                    style={{ width: '100%' }}
-                  />
+                  <Button
+                    variant="outlined"
+                    style={{ width: '100%', height: '64px' }}
+                    onClick={onConfirmDestination}
+                  >
+                    Confirm Destination
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={6}>
-                <Button
-                  variant="outlined"
-                  style={{ width: '100%', height: '64px' }}
-                >
-                  Choose from favorites
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Button
-                  variant="outlined"
-                  style={{ width: '100%', height: '64px' }}
-                  onClick={onConfirmDestination}
-                >
-                  Confirm Destination
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
+          )}
         </CardContent>
       </Card>
     </>

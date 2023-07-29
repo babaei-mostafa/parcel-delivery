@@ -20,8 +20,6 @@ export default function Form({
   setDistance,
   duration,
   setDuration,
-  prices,
-  setPrices,
 }) {
   const [originSection, setOriginSection] = useState(true)
   const [destinatioSection, setDestinatioSection] = useState(false)
@@ -30,6 +28,8 @@ export default function Form({
   const [selectedParcelType, setSelectedParcelType] = useState(null)
   const [routes, setRoutes] = useState([])
   const [durations, setDurations] = useState([])
+  const [prices, setPrices] = useState([])
+
 
   const {
     ready: originAutocompleteIsReady,

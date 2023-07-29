@@ -130,77 +130,78 @@ export default function TransportSection({
   return (
     <Card>
       <CardContent>
-        {error && (
+        {error ? (
           <Typography color="error" variant="body2" gutterBottom>
             {error}
           </Typography>
-        )}
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography gutterBottom variant="body1" component="div">
-              Transport Options
-            </Typography>
-          </Grid>
-          {transportModes.map((mode, index) => (
-            <Grid item xs={4} key={index}>
-              <Card
-                onClick={() => handleCardClick(mode.mode, index)}
-                style={{
-                  cursor: selectedParcelType.vehicle_type[mode.mode]
-                    ? 'pointer'
-                    : 'not-allowed',
-                  backgroundColor:
-                    clickedIndex === index
-                      ? 'lightblue'
-                      : selectedParcelType.vehicle_type[mode.mode]
-                      ? 'transparent'
-                      : 'gray',
-                  height: '100%',
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  alt="green iguana"
-                  height={100}
-                  style={{ objectFit: 'contain' }}
-                  image={mode.image}
-                />
-                <CardContent>
-                  {selectedParcelType.vehicle_type[mode.mode] ? (
-                    <>
-                      <Typography variant="body2">
-                        Price: $
-                        {calculatePrice(
-                          durations[index],
-                          `${mode.mode.toUpperCase()}`
-                        )}
-                      </Typography>
-                      <Typography variant="body2">
-                        {durations[index]}
-                      </Typography>
-                    </>
-                  ) : (
-                    <Typography variant="body2">Not an Option</Typography>
-                  )}
-                </CardContent>
-              </Card>
+        ) : (
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography gutterBottom variant="body1" component="div">
+                Transport Options
+              </Typography>
             </Grid>
-          ))}
-          <Grid item xs={12}>
-            <Typography>Duration: {durations[clickedIndex]}</Typography>
-            <Typography>Price: ${prices[clickedIndex]}</Typography>
+            {transportModes.map((mode, index) => (
+              <Grid item xs={4} key={index}>
+                <Card
+                  onClick={() => handleCardClick(mode.mode, index)}
+                  style={{
+                    cursor: selectedParcelType.vehicle_type[mode.mode]
+                      ? 'pointer'
+                      : 'not-allowed',
+                    backgroundColor:
+                      clickedIndex === index
+                        ? 'lightblue'
+                        : selectedParcelType.vehicle_type[mode.mode]
+                        ? 'transparent'
+                        : 'gray',
+                    height: '100%',
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    alt="green iguana"
+                    height={100}
+                    style={{ objectFit: 'contain' }}
+                    image={mode.image}
+                  />
+                  <CardContent>
+                    {selectedParcelType.vehicle_type[mode.mode] ? (
+                      <>
+                        <Typography variant="body2">
+                          Price: $
+                          {calculatePrice(
+                            durations[index],
+                            `${mode.mode.toUpperCase()}`
+                          )}
+                        </Typography>
+                        <Typography variant="body2">
+                          {durations[index]}
+                        </Typography>
+                      </>
+                    ) : (
+                      <Typography variant="body2">Not an Option</Typography>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+            <Grid item xs={12}>
+              <Typography>Duration: {durations[clickedIndex]}</Typography>
+              <Typography>Price: ${prices[clickedIndex]}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="outlined"
+                style={{ width: '100%', height: '64px' }}
+                // onClick={() => onChange(parcelTypes[clickedIndex])}
+                disabled={clickedIndex === null}
+              >
+                Confirm Transport Option
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="outlined"
-              style={{ width: '100%', height: '64px' }}
-              // onClick={() => onChange(parcelTypes[clickedIndex])}
-              disabled={clickedIndex === null}
-            >
-              Confirm Transport Option
-            </Button>
-          </Grid>
-        </Grid>
+        )}
       </CardContent>
     </Card>
   )
