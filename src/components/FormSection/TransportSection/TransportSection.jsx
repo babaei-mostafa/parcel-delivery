@@ -143,47 +143,56 @@ export default function TransportSection({
             </Grid>
             {transportModes.map((mode, index) => (
               <Grid item xs={4} key={index}>
-                <Card
-                  onClick={() => handleCardClick(mode.mode, index)}
-                  style={{
-                    cursor: selectedParcelType.vehicle_type[mode.mode]
-                      ? 'pointer'
-                      : 'not-allowed',
-                    backgroundColor:
-                      clickedIndex === index
-                        ? 'lightblue'
-                        : selectedParcelType.vehicle_type[mode.mode]
-                        ? 'transparent'
-                        : 'gray',
-                    height: '100%',
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    alt="green iguana"
-                    height={100}
-                    style={{ objectFit: 'contain' }}
-                    image={mode.image}
-                  />
-                  <CardContent>
-                    {selectedParcelType.vehicle_type[mode.mode] ? (
-                      <>
-                        <Typography variant="body2">
-                          Price: $
-                          {calculatePrice(
-                            durations[index],
-                            `${mode.mode.toUpperCase()}`
-                          )}
-                        </Typography>
-                        <Typography variant="body2">
-                          {durations[index]}
-                        </Typography>
-                      </>
-                    ) : (
+                {!selectedParcelType.vehicle_type[mode.mode] ? (
+                  <div
+                    style={{
+                      cursor: 'not-allowed',
+                      backgroundColor: 'gray',
+                      height: '100%',
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      alt="green iguana"
+                      height={100}
+                      style={{ objectFit: 'contain' }}
+                      image={mode.image}
+                    />
+                    <CardContent>
                       <Typography variant="body2">Not an Option</Typography>
-                    )}
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </div>
+                ) : (
+                  <Card
+                    onClick={() => handleCardClick(mode.mode, index)}
+                    style={{
+                      cursor: 'pointer',
+                      backgroundColor:
+                        clickedIndex === index ? 'lightblue' : 'transparent',
+                      height: '100%',
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      alt="green iguana"
+                      height={100}
+                      style={{ objectFit: 'contain' }}
+                      image={mode.image}
+                    />
+                    <CardContent>
+                      <Typography variant="body2">
+                        Price: $
+                        {calculatePrice(
+                          durations[index],
+                          mode.mode.toUpperCase()
+                        )}
+                      </Typography>
+                      <Typography variant="body2">
+                        {durations[index]}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                )}
               </Grid>
             ))}
             <Grid item xs={12}>
